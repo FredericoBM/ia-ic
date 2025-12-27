@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados | NeuroRadio.AI</title>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
+    <meta name="theme-color" content="#0a0f1d">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-main: #0a0f1d; 
+            --bg-card: #131c2e; 
+            --accent-cyan: #00e1ff; 
+            --accent-blue: #4a90e2;
+            --text-light: #e0e6ed;
+            --text-dim: #8b9bb4;
+            --font-stack: 'Inter', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-light);
+            font-family: var(--font-stack);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        img { max-width: 100%; height: auto; display: block; }
+
+        /* --- Background Animado --- */
+        .background-shapes {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            overflow: hidden; z-index: -1; pointer-events: none;
+        }
+        .background-shapes li {
+            position: absolute; display: block; list-style: none;
+            width: 20px; height: 20px; background: rgba(0, 225, 255, 0.03);
+            border: 1px solid rgba(0, 225, 255, 0.1); bottom: -150px;
+            animation: floatUp 25s linear infinite;
+        }
+        .background-shapes li:nth-child(1) { left: 25%; width: 80px; height: 80px; animation-delay: 0s; }
+        .background-shapes li:nth-child(2) { left: 10%; width: 20px; height: 20px; animation-delay: 2s; animation-duration: 12s; }
+        .background-shapes li:nth-child(3) { left: 70%; width: 20px; height: 20px; animation-delay: 4s; }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; border-radius: 0; }
+            20% { opacity: 1; border-radius: 20%; }
+            100% { transform: translateY(-1000px) rotate(720deg); opacity: 0; border-radius: 50%; }
+        }
+
+        /* --- Navbar --- */
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1.2rem 5%; background: rgba(10, 15, 29, 0.9);
+            backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100;
+            border-bottom: 1px solid rgba(0, 225, 255, 0.1);
+        }
+        .logo { font-weight: 700; font-size: 1.2rem; }
+        .logo span { color: var(--accent-cyan); }
+        .nav-links { list-style: none; display: flex; gap: 2rem; }
+        .nav-links a { text-decoration: none; color: inherit; transition: 0.3s; font-size: 0.9rem; }
+        .nav-links a:hover { color: var(--accent-cyan); }
+
+        /* --- Header --- */
+        .page-header {
+            padding: clamp(4rem, 10vh, 6rem) 5% 3rem; text-align: center;
+            background: linear-gradient(180deg, rgba(0, 225, 255, 0.05) 0%, transparent 100%);
+        }
+        h1 {
+            font-size: clamp(2rem, 8vw, 3rem); margin-bottom: 1rem;
+            background: linear-gradient(90deg, #fff, var(--accent-cyan));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .subtitle { color: var(--text-dim); max-width: 750px; margin: 0 auto; font-size: clamp(0.9rem, 2vw, 1.1rem); }
+
+        /* --- Grid de Métricas --- */
+        .metrics-summary {
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem; max-width: 1100px; margin: 2rem auto; padding: 0 5%;
+        }
+        .metric-card {
+            background: var(--bg-card); padding: 1.5rem; border-radius: 12px;
+            text-align: center; border: 1px solid rgba(0, 225, 255, 0.1);
+            transition: 0.3s;
+        }
+        .metric-card:hover { border-color: var(--accent-cyan); transform: translateY(-5px); }
+        .metric-value { display: block; font-size: clamp(1.5rem, 5vw, 2.2rem); font-weight: 800; color: var(--accent-cyan); }
+        .metric-label { color: var(--text-dim); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* --- Seções de Conteúdo --- */
+        .results-section { max-width: 1100px; margin: 2rem auto 4rem; padding: 0 5%; }
+        .section-title { font-size: 1.6rem; margin: 4rem 0 2rem; display: flex; align-items: center; gap: 15px; }
+        .section-title::after { content: ''; flex: 1; height: 1px; background: rgba(0, 225, 255, 0.2); }
+
+        .chart-container {
+            background: var(--bg-card); border-radius: 15px; padding: clamp(1rem, 3vw, 2rem);
+            border: 1px solid rgba(255, 255, 255, 0.05); margin-bottom: 3rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .chart-container img {
+            width: 100%; border-radius: 8px; filter: brightness(0.9) contrast(1.1);
+            transition: 0.5s; cursor: zoom-in;
+        }
+        .chart-container img:hover { filter: brightness(1); }
+        
+        .chart-info { margin-top: 1.5rem; }
+        .chart-info h3 { color: var(--accent-cyan); margin-bottom: 0.5rem; font-size: 1.2rem; }
+        .chart-info p { color: var(--text-dim); font-size: 0.95rem; }
+
+        /* --- Grid para Matrizes --- */
+        .matrix-grid {
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 2rem;
+        }
+
+        .insight-box {
+            background: rgba(0, 225, 255, 0.05); border-left: 4px solid var(--accent-cyan);
+            padding: 1.5rem; margin-top: 1rem; border-radius: 0 8px 8px 0;
+            font-size: 0.95rem;
+        }
+
+        footer { text-align: center; padding: 4rem 5%; color: var(--text-dim); border-top: 1px solid rgba(255,255,255,0.05); }
+
+        /* Ajustes específicos para mobile */
+        @media (max-width: 600px) {
+            .navbar { flex-direction: column; gap: 1rem; padding: 1rem; }
+            .nav-links { gap: 1rem; }
+            .section-title { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <ul class="background-shapes">
+        <li></li><li></li><li></li><li></li><li></li>
+        <li></li><li></li><li></li><li></li><li></li>
+    </ul>
+
+    <nav class="navbar">
+        <div class="logo">NeuroRadio<span>.AI</span></div>
+        <ul class="nav-links">
+            <li><a href="index.html">Início</a></li>
+            <li><a href="metod.html">Metodologia</a></li>
+            <li><a href="data.html">Dataset</a></li>
+        </ul>
+    </nav>
+
+    <header class="page-header">
+        <h1>Performance do Modelo</h1>
+        <p class="subtitle">Análise detalhada da inferência do YOLOv8 após 100 épocas de treinamento em radiografias panorâmicas.</p>
+    </header>
+
+    <div class="metrics-summary">
+        <div class="metric-card">
+            <span class="metric-value">0.605</span>
+            <span class="metric-label">mAP50 (B)</span>
+        </div>
+        <div class="metric-card">
+            <span class="metric-value">0.458</span>
+            <span class="metric-label">mAP50-95 (B)</span>
+        </div>
+        <div class="metric-card">
+            <span class="metric-value">0.796</span>
+            <span class="metric-label">Precisão Máxima</span>
+        </div>
+        <div class="metric-card">
+            <span class="metric-value">0.490</span>
+            <span class="metric-label">F1-Score Médio</span>
+        </div>
+    </div>
+
+    <main class="results-section">
+        
+        <h2 class="section-title"><span>📈</span> Curvas de Convergência</h2>
+        <div class="chart-container">
+            <img src="results.png" alt="Gráficos de Loss e Métricas">
+            <div class="chart-info">
+                <h3>Treinamento vs. Validação</h3>
+                <p>As curvas de <strong>box_loss</strong> e <strong>cls_loss</strong> demonstram uma descida consistente, indicando que o modelo aprendeu a localizar e classificar as estruturas sem sinais óbvios de overfitting severo até a época 100.</p>
+            </div>
+        </div>
+
+        <h2 class="section-title"><span>🎯</span> Matriz de Confusão</h2>
+        <div class="matrix-grid">
+            <div class="chart-container">
+                <img src="confusion_matrix.png" alt="Matriz de Confusão Absoluta">
+                <div class="chart-info">
+                    <h3>Valores Absolutos</h3>
+                </div>
+            </div>
+            <div class="chart-container">
+                <img src="confusion_matrix_normalized.png" alt="Matriz de Confusão Normalizada">
+                <div class="chart-info">
+                    <h3>Normalizada</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="insight-box">
+            <strong>Análise Técnica:</strong> O modelo apresenta performance excepcional na classe <code>tooth</code> (0.96) e <code>ppf</code> (1.00). Note o desafio na distinção entre implantes e dentes naturais devido à morfologia similar.
+        </div>
+
+        <h2 class="section-title"><span>🧬</span> Equilíbrio Precisão/Recall</h2>
+        <div class="chart-container">
+            <img src="BoxF1_curve.png" alt="Curva F1-Confiança">
+            <div class="chart-info">
+                <h3>F1-Confidence Curve</h3>
+                <p>O pico de F1-Score médio de <strong>0.49</strong> ocorre com um limiar de confiança de <strong>0.182</strong>.</p>
+            </div>
+        </div>
+
+        <h2 class="section-title"><span>📊</span> Desbalanceamento</h2>
+        <div class="chart-container">
+            <img src="labels.jpg" alt="Distribuição de Labels">
+            <div class="chart-info">
+                <p>Análise da frequência de instâncias por classe, evidenciando a predominância de <code>tooth</code> (1176 instâncias) no conjunto de dados.</p>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>NeuroRadio.AI - Resultados de Pesquisa Científica | 2025</p>
+    </footer>
+
+</body>
+</html>

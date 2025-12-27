@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metodologia | NeuroRadio.AI</title>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
+    <meta name="theme-color" content="#0a0f1d">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-main: #0a0f1d; 
+            --bg-card: #131c2e; 
+            --accent-cyan: #00e1ff; 
+            --accent-blue: #4a90e2;
+            --text-light: #e0e6ed;
+            --text-dim: #8b9bb4;
+            --font-stack: 'Inter', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-light);
+            font-family: var(--font-stack);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- BACKGROUND ANIMADO --- */
+        .background-shapes {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            overflow: hidden; z-index: -1; pointer-events: none;
+        }
+        .background-shapes li {
+            position: absolute; display: block; list-style: none;
+            width: 20px; height: 20px; background: rgba(0, 225, 255, 0.03);
+            border: 1px solid rgba(0, 225, 255, 0.1); bottom: -150px;
+            animation: floatUp 25s linear infinite;
+        }
+        .background-shapes li:nth-child(1) { left: 25%; width: 80px; height: 80px; animation-delay: 0s; }
+        .background-shapes li:nth-child(2) { left: 10%; width: 20px; height: 20px; animation-delay: 2s; animation-duration: 12s; }
+        .background-shapes li:nth-child(3) { left: 70%; width: 20px; height: 20px; animation-delay: 4s; }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; border-radius: 0; }
+            20% { opacity: 1; border-radius: 20%; }
+            100% { transform: translateY(-1000px) rotate(720deg); opacity: 0; border-radius: 50%; }
+        }
+
+        /* --- Navbar --- */
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1.2rem 5%; background: rgba(10, 15, 29, 0.9);
+            backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100;
+            border-bottom: 1px solid rgba(0, 225, 255, 0.1);
+        }
+        .logo { font-weight: 700; font-size: 1.2rem; }
+        .logo span { color: var(--accent-cyan); }
+        .nav-links { list-style: none; display: flex; gap: clamp(1rem, 3vw, 2rem); }
+        .nav-links a { text-decoration: none; color: inherit; transition: 0.3s; font-size: 0.9rem; }
+        .nav-links a:hover { color: var(--accent-cyan); }
+
+        /* --- Header --- */
+        .page-header {
+            padding: clamp(4rem, 10vh, 6rem) 5% 3rem; text-align: center;
+            background: linear-gradient(180deg, rgba(0, 225, 255, 0.05) 0%, transparent 100%);
+        }
+        h1 {
+            font-size: clamp(2.2rem, 8vw, 3rem); margin-bottom: 1rem;
+            background: linear-gradient(90deg, #fff, var(--accent-cyan));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .subtitle { color: var(--text-dim); max-width: 750px; margin: 0 auto; font-size: clamp(0.9rem, 2vw, 1.1rem); }
+
+        /* --- Pipeline Visual --- */
+        .methodology-container {
+            max-width: 1000px; margin: 4rem auto; padding: 0 5%; position: relative;
+        }
+
+        /* Linha vertical central */
+        .methodology-container::before {
+            content: ''; position: absolute; left: 50%; top: 0; bottom: 0;
+            width: 2px; background: linear-gradient(to bottom, var(--accent-cyan), var(--accent-blue), transparent);
+            transform: translateX(-50%); opacity: 0.3;
+        }
+
+        .step {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: clamp(3rem, 10vh, 6rem); position: relative; width: 100%;
+        }
+
+        .step-content {
+            width: clamp(280px, 45%, 450px);
+            background: var(--bg-card); padding: clamp(1.5rem, 5vw, 2rem);
+            border-radius: 15px; border: 1px solid rgba(0, 225, 255, 0.1);
+            transition: 0.4s; position: relative; z-index: 2;
+        }
+
+        .step:hover .step-content {
+            border-color: var(--accent-cyan); box-shadow: 0 0 20px rgba(0, 225, 255, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .step-number {
+            position: absolute; left: 50%; transform: translateX(-50%);
+            width: 40px; height: 40px; background: var(--bg-main);
+            border: 2px solid var(--accent-cyan); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; color: var(--accent-cyan);
+            box-shadow: 0 0 15px rgba(0, 225, 255, 0.4); z-index: 3;
+        }
+
+        .step:nth-child(even) { flex-direction: row-reverse; }
+
+        .step h2 {
+            color: var(--accent-cyan); margin-bottom: 1rem;
+            font-size: clamp(1.2rem, 3vw, 1.5rem); display: flex; align-items: center; gap: 10px;
+        }
+
+        .step p { font-size: 0.95rem; color: var(--text-dim); }
+
+        .tech-specs {
+            background: rgba(0, 225, 255, 0.03); border: 1px dashed rgba(0, 225, 255, 0.3);
+            margin-top: 1rem; padding: 1rem; border-radius: 8px;
+            font-family: monospace; font-size: 0.85rem; overflow-x: auto;
+        }
+        .tech-specs span { color: var(--accent-cyan); }
+
+        footer { text-align: center; padding: 4rem 5%; color: var(--text-dim); border-top: 1px solid rgba(255,255,255,0.05); position: relative; z-index: 1;}
+
+        /* Responsividade para telas menores */
+        @media (max-width: 768px) {
+            .navbar { flex-direction: column; gap: 1rem; }
+            .methodology-container::before, .step-number { display: none; }
+            .step, .step:nth-child(even) { flex-direction: column; }
+            .step-content { width: 100%; margin-bottom: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <ul class="background-shapes">
+        <li></li><li></li><li></li><li></li><li></li>
+        <li></li><li></li><li></li><li></li><li></li>
+    </ul>
+
+    <nav class="navbar">
+        <div class="logo">NeuroRadio<span>.AI</span></div>
+        <ul class="nav-links">
+            <li><a href="index.html">Início</a></li>
+            <li><a href="data.html">Dataset</a></li>
+            <li><a href="results.html">Resultados</a></li>
+        </ul>
+    </nav>
+
+    <header class="page-header">
+        <h1>Metodologia Científica</h1>
+        <p class="subtitle">O rigor técnico por trás do processamento de imagens e treinamento da inteligência artificial aplicada à radiologia dental.</p>
+    </header>
+
+    <main class="methodology-container" id="pipeline">
+        
+        <div class="step">
+            <div class="step-number">01</div>
+            <div class="step-content">
+                <h2><span>📡</span> Coleta de Dados</h2>
+                <p>O dataset consolidado é composto por mais de 30.000 radiografias panorâmicas anonimizadas, provenientes de múltiplas fontes globais. Utilizamos imagens em formato DICOM convertidas para PNG de alta resolução para garantir a preservação de detalhes.</p>
+                <div class="tech-specs">
+                    Dataset: <span>Mix Multi-Cêntrico</span><br>
+                    Resolução Treino: <span>640 x 640 px</span>
+                </div>
+            </div>
+            <div style="width: 45%;"></div>
+        </div>
+
+        <div class="step">
+            <div class="step-number">02</div>
+            <div class="step-content">
+                <h2><span>⚙️</span> Pré-processamento</h2>
+                <p>Aplicamos o algoritmo <strong>CLAHE</strong> para realçar bordas de estruturas sutis como raízes e lesões cariosas sem saturar ruídos. As imagens foram convertidas para escala de cinza e redimensionadas mantendo a proporção anatômica.</p>
+                <div class="tech-specs">
+                    Augmentation: <span>Mosaic, MixUp, Flip</span><br>
+                    Norm: <span>CLAHE (Clip=2.0, Grid=8x8)</span>
+                </div>
+            </div>
+            <div style="width: 45%;"></div>
+        </div>
+
+        <div class="step">
+            <div class="step-number">03</div>
+            <div class="step-content">
+                <h2><span>🧠</span> Arquitetura da Rede</h2>
+                <p>Adotamos a arquitetura <strong>YOLOv8</strong>, estado-da-arte em detecção de objetos em tempo real. O modelo utiliza uma abordagem de estágio único para prever classes de patologias e coordenadas (Bounding Boxes) simultaneamente.</p>
+                <div class="tech-specs">
+                    Backbone: <span>CSPDarknet (C2f Modules)</span><br>
+                    Optimizer: <span>SGD (lr0=0.01)</span>
+                </div>
+            </div>
+            <div style="width: 45%;"></div>
+        </div>
+
+        <div class="step">
+            <div class="step-number">04</div>
+            <div class="step-content">
+                <h2><span>📊</span> Métricas de Sucesso</h2>
+                <p>A avaliação utiliza o <strong>mAP50</strong>, que atingiu aproximadamente 0.60 no treinamento. O desempenho é equilibrado entre precisão e recall, com um F1-Score médio de 0.49 atingido em um limiar de confiança de 0.182.</p>
+                <div class="tech-specs">
+                    Metrics: <span>mAP50, mAP50-95, F1-Score</span><br>
+                    Loss Fn: <span>CIoU + DFL</span>
+                </div>
+            </div>
+            <div style="width: 45%;"></div>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>NeuroRadio.AI - Documentação de Metodologia v1.0 | 2025-2027</p>
+    </footer>
+
+</body>
+</html>
